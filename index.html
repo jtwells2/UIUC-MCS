@@ -2,26 +2,25 @@
 <html>
 <script src="https://d3js.org/d3.v6.js"></script>
 <body>
-<h1>D3.js Scatter-Plot</h1>
+<h1>GDP Per Capita</h1>
 
 <svg id="John_Wells_Data_Visualization" style="width:900px;height:900px"></svg>
 
 <script>
 
-	//Constants to declare before 
+	//Constants to declare before loading
 	const chartWidth = 800
     const chartHeight = 500
-	const marginTop = 30
-    const marginBottom = 20
-    const marginLeft = 50
-    const marginRight = 20
+	const marginLeft = 50
+    const marginTop = 20
 
-// append the svg object to the body of the page
-const svg = d3.select("#John_Wells_Data_Visualization").append("svg")
-    .attr("width", chartWidth + marginLeft + marginRight)
-    .attr("height", chartHeight + marginTop + marginBottom)
-  .append("g")
-    .attr("transform", `translate(${marginLeft},${marginTop})`);
+	// append the svg object to the body of the page
+	const svg = d3.select("#John_Wells_Data_Visualization").append("svg")
+    	.attr("width", chartWidth + marginLeft*2)
+    	.attr("height", chartHeight + marginTop*2)
+    
+  	.append("g")
+    	.attr("transform", "translate("+marginLeft+","+marginTop+")");
 
 //Read the data
 d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_Data.csv").then( function(data) {
@@ -29,20 +28,20 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
   // group the data: I want to draw one line per group
   const sumstat = d3.group(data, d => d.Country); // nest function allows to group the calculation per level of a factor
 
-  // Add X axis --> it is a date format
+  // X-Axis (Date)
   const x = d3.scaleLinear()
-    .domain(d3.extent(data, function(d) { return d.Year; }))
-    .range([ 0, chartWidth ]);
+    .domain(d3.extent(data, function(d) { return +d.Year; }))
+    .range([0, chartWidth]);
   svg.append("g")
-    .attr("transform", `translate(0, ${chartHeight})`)
+    .attr("transform", "translate(0,"+chartHeight+")")
     .call(d3.axisBottom(x).ticks(10));
 
-  // Add Y axis
+  // Y-Axis (GDP Per Capita)
   const y = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return +d.Value; })])
-    .range([ chartHeight, 0 ]);
+    .range([chartHeight, 0]);
   svg.append("g")
-    .call(d3.axisLeft(y));
+    .call(d3.axisLeft(y).ticks(20));
 
   // color palette
   const color = d3.scaleOrdinal()
@@ -56,7 +55,7 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
       .duration(1000)
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 3)
         .attr("d", function(d){
           return d3.line()
             .x(function(d) { return x(d.Year); })
@@ -67,6 +66,8 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
 })
 </script>
 
+</body>
+</html>
 </body>
 </html>
 
