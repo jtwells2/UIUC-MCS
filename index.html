@@ -2,24 +2,26 @@
 <html>
 <script src="https://d3js.org/d3.v6.js"></script>
 <body>
-<h2>D3.js Scatter-Plot</h2>
+<h1>D3.js Scatter-Plot</h1>
 
-<svg id="John_Wells_Data_Visualization" style="width:700px;height:700px"></svg>
+<svg id="John_Wells_Data_Visualization" style="width:900px;height:900px"></svg>
 
 <script>
 
-// set the dimensions and margins of the graph
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+	//Constants to declare before 
+	const chartWidth = 800
+    const chartHeight = 500
+	const marginTop = 30
+    const marginBottom = 20
+    const marginLeft = 50
+    const marginRight = 20
 
 // append the svg object to the body of the page
-const svg = d3.select("#John_Wells_Data_Visualization")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+const svg = d3.select("#John_Wells_Data_Visualization").append("svg")
+    .attr("width", chartWidth + marginLeft + marginRight)
+    .attr("height", chartHeight + marginTop + marginBottom)
   .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", `translate(${marginLeft},${marginTop})`);
 
 //Read the data
 d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_Data.csv").then( function(data) {
@@ -30,15 +32,15 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
   // Add X axis --> it is a date format
   const x = d3.scaleLinear()
     .domain(d3.extent(data, function(d) { return d.Year; }))
-    .range([ 0, width ]);
+    .range([ 0, chartWidth ]);
   svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).ticks(6));
+    .attr("transform", `translate(0, ${chartHeight})`)
+    .call(d3.axisBottom(x).ticks(10));
 
   // Add Y axis
   const y = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return +d.Value; })])
-    .range([ height, 0 ]);
+    .range([ chartHeight, 0 ]);
   svg.append("g")
     .call(d3.axisLeft(y));
 
@@ -50,6 +52,8 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
   svg.selectAll(".line")
       .data(sumstat)
       .join("path")
+      .transition()
+      .duration(1000)
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
         .attr("stroke-width", 1.5)
