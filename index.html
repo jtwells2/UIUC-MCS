@@ -1,44 +1,14 @@
 <!DOCTYPE html>
 <script src="http://d3js.org/d3.v5.min.js"></script>
+<div id="John_Wells_Narrative_Visualization"></div>
 
-<body onload='init()'>
+<svg> 
+  <circle class="target" style="fill: #69b3a2" stroke="black" cx=50 cy=50 r=40></circle>
+</svg>
+
 <script>
-
-const width = 800;
-const height = 600;
-const marginTop = 20;
-const marginRight = 20;
-const marginBottom = 30;
-const marginLeft = 40;
-
-// Declare the x (horizontal position) scale.
-const x = d3.scaleUtc()
-    .domain([new Date("2023-01-01"), new Date("2024-01-01")])
-    .range([marginLeft, width - marginRight]);
-
-// Declare the y (vertical position) scale.
-const y = d3.scaleLinear()
-    .domain([0, 100])
-    .range([height - marginBottom, marginTop]);
-
-// Create the SVG container.
-const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-// Add the x-axis.
-svg.append("g")
-    .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(d3.axisBottom(x));
-
-// Add the y-axis.
-svg.append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
-    .call(d3.axisLeft(y));
-
-// Append the SVG element.
-container.append(svg.node());
+d3
+  .select(".target")  // select the elements that have the class 'target'
+  .style("stroke-width", 8) // change their style: stroke width is not equal to 8 pixels
   
 </script>
-</body>
-</html>
