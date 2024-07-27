@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
 <body>
 <h2>D3.js Scatter-Plot</h2>
 
-<svg id="myPlot" style="width:500px;height:500px"></svg>
+<svg id="John_Wells_Data_Visualization" style="width:500px;height:500px"></svg>
 
 <script>
 // Set Dimensions
@@ -22,7 +22,7 @@ for (let i = 0; i < numPoints; i++) {
 }
 
 // Append SVG Object to the Page
-const svg = d3.select("#myPlot")
+const svg = d3.select("#John_Wells_Data_Visualization")
   .append("svg")
   .append("g")
   .attr("transform","translate(" + margin + "," + margin + ")");
@@ -57,3 +57,4 @@ svg.append('g')
 
 </body>
 </html>
+
