@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<script src="http://d3js.org/d3.v5.min.js"></script>
+<script src="http://d3js.org/d3.v6.min.js"></script>
 <div id="John_Wells_Narrative_Visualization"></div>
 
 <svg> 
@@ -7,8 +7,30 @@
 </svg>
 
 <script>
-d3
-  .select(".target")  // select the elements that have the class 'target'
-  .style("stroke-width", 8) // change their style: stroke width is not equal to 8 pixels
+  
+  const width = 800;
+  const height = 600;
+  const marginTop = 20;
+  const marginRight = 20;
+  const marginBottom = 30;
+  const marginLeft = 40;
+
+  const x = d3.scaleUtc()
+      .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+      .range([marginLeft, width - marginRight]);
+
+  const y = d3.scaleLinear()
+      .domain([0, 100])
+      .range([height - marginBottom, marginTop]);
+  
+  const svg = d3.select("#John_Wells_Narrative_Visualization").append("svg")
+      .attr("width", width + marginLeft + marginRight)
+      .attr("height", height + marginTop + marginBottom)
+    svg.append("g")
+      .attr("transform", `translate(0,${height - marginBottom})`)
+      .call(d3.axisBottom(x));
+    svg.append("g")
+      .attr("transform", `translate(${marginLeft},0)`)
+      .call(d3.axisLeft(y));
   
 </script>
