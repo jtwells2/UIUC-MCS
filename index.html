@@ -4,20 +4,25 @@
 <body>
 <h1>GDP Per Capita</h1>
 
-<svg id="John_Wells_Data_Visualization" style="width:900px;height:900px"></svg>
+<svg id="John_Wells_Data_Visualization" 
+	width="900" 
+    height ="900" 
+    style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
+</svg>
 
 <script>
 
 	//Constants to declare before loading
 	const chartWidth = 800
     const chartHeight = 500
-	const marginLeft = 50
+	const marginLeft = 70
     const marginTop = 20
+    const transitionDuration = 750
 
 	// append the svg object to the body of the page
 	const svg = d3.select("#John_Wells_Data_Visualization").append("svg")
-    	.attr("width", chartWidth + marginLeft*2)
-    	.attr("height", chartHeight + marginTop*2)
+    	.attr("width", chartWidth + marginLeft*4)
+    	.attr("height", chartHeight + marginTop*4)
     
   	.append("g")
     	.attr("transform", "translate("+marginLeft+","+marginTop+")");
@@ -28,31 +33,44 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
   // group the data: I want to draw one line per group
   const sumstat = d3.group(data, d => d.Country); // nest function allows to group the calculation per level of a factor
 
-  // X-Axis (Date)
+  // X-Axis and Label (Date)
   const x = d3.scaleLinear()
     .domain(d3.extent(data, function(d) { return +d.Year; }))
     .range([0, chartWidth]);
   svg.append("g")
     .attr("transform", "translate(0,"+chartHeight+")")
     .call(d3.axisBottom(x).ticks(10));
+    
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", chartWidth / 2)
+    .attr("y", chartHeight + marginTop + 20)
+    .text("Year");
 
-  // Y-Axis (GDP Per Capita)
+  // Y-Axis and Label (GDP Per Capita ($USD))
   const y = d3.scaleLinear()
     .domain([0, d3.max(data, function(d) { return +d.Value; })])
     .range([chartHeight, 0]);
   svg.append("g")
     .call(d3.axisLeft(y).ticks(20));
+    
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform","rotate(-90)")
+    .attr("x", -chartHeight / 2)
+    .attr("y", -marginLeft + 20)
+    .text("GDP Per Capita ($USD)");
 
   // color palette
   const color = d3.scaleOrdinal()
     .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
-
+    
   // Draw the line
   svg.selectAll(".line")
       .data(sumstat)
       .join("path")
       .transition()
-      .duration(1000)
+      .duration(transitionDuration+2000)
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
         .attr("stroke-width", 3)
@@ -60,7 +78,7 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
           return d3.line()
             .x(function(d) { return x(d.Year); })
             .y(function(d) { return y(+d.Value); })
-            (d[1])
+            (d[1])    
         })
 
 })
@@ -68,6 +86,3 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
 
 </body>
 </html>
-</body>
-</html>
-
