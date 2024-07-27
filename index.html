@@ -22,11 +22,11 @@
   const svg = d3.select("#John_Wells_Narrative_Visualization").append("svg")
       .attr("width", width + marginLeft + marginRight)
       .attr("height", height + marginTop + marginBottom)
+  
     svg.append("g")
-      .attr("transform", `translate(0,${height - marginBottom})`)
       .call(d3.axisBottom(x));
+  
     svg.append("g")
-      .attr("transform", `translate(${marginLeft},0)`)
       .call(d3.axisLeft(y));
   
 </script>
