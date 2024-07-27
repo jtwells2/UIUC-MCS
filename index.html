@@ -1,60 +1,70 @@
 <!DOCTYPE html>
 <html>
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3.v6.js"></script>
 <body>
 <h2>D3.js Scatter-Plot</h2>
 
-<svg id="John_Wells_Data_Visualization" style="width:500px;height:500px"></svg>
+<svg id="John_Wells_Data_Visualization" style="width:700px;height:700px"></svg>
 
 <script>
-// Set Dimensions
-const xSize = 500; 
-const ySize = 500;
-const margin = 40;
-const xMax = xSize - margin*2;
-const yMax = ySize - margin*2;
 
-// Create Random Points
-const numPoints = 100;
-const data = [];
-for (let i = 0; i < numPoints; i++) {
-  data.push([Math.random() * xMax, Math.random() * yMax]);
-}
+// set the dimensions and margins of the graph
+const margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
-// Append SVG Object to the Page
+// append the svg object to the body of the page
 const svg = d3.select("#John_Wells_Data_Visualization")
   .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("transform","translate(" + margin + "," + margin + ")");
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// X Axis
-const x = d3.scaleLinear()
-  .domain([0, 500])
-  .range([0, xMax]);
+//Read the data
+d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_Data.csv").then( function(data) {
 
-svg.append("g")
-  .attr("transform", "translate(0," + yMax + ")")
-  .call(d3.axisBottom(x));
+  // group the data: I want to draw one line per group
+  const sumstat = d3.group(data, d => d.name); // nest function allows to group the calculation per level of a factor
 
-// Y Axis
-const y = d3.scaleLinear()
-  .domain([0, 500])
-  .range([ yMax, 0]);
+  // Add X axis --> it is a date format
+  const x = d3.scaleLinear()
+    .domain(d3.extent(data, function(d) { return d.year; }))
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x).ticks(6));
 
-svg.append("g")
-  .call(d3.axisLeft(y));
+  // Add Y axis
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return +d.value; })])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
 
-// Dots
-svg.append('g')
-  .selectAll("dot")
-  .data(data).enter()
-  .append("circle")
-  .attr("cx", function (d) { return d[0] } )
-  .attr("cy", function (d) { return d[1] } )
-  .attr("r", 3)
-  .style("fill", "Red");
+  // color palette
+  const color = d3.scaleOrdinal()
+    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+  // Draw the line
+  svg.selectAll(".line")
+      .data(sumstat)
+      .join("path")
+        .attr("fill", "none")
+        .attr("stroke", function(d){ return color(d[0]) })
+        .attr("stroke-width", 1.5)
+        .attr("d", function(d){
+          return d3.line()
+            .x(function(d) { return x(d.year); })
+            .y(function(d) { return y(+d.value); })
+            (d[1])
+        })
+
+})
 </script>
 
+</body>
+</html>
 </body>
 </html>
 
