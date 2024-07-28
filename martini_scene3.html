@@ -17,6 +17,7 @@
 <!-- Load d3-annotation -->
 <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
+<!-- Set up svg container -->
 <svg id="John_Wells_Data_Visualization" 
 	width = "900" 
     height = "900" 
@@ -50,10 +51,10 @@
     	label:"Japan",
     	bgPadding: 5,
   	},
-  	x: 435,
-    y: 255,
-  	dy: -60,
-  	dx: -10
+	  	x: 435,
+	    y: 255,
+	  	dy: -60,
+	  	dx: -10
 	}]
     
     const annotation2 = [{
@@ -61,10 +62,10 @@
     	label:"Australia",
     	bgPadding: 5,
   	},
-  	x: 760,
-    y: 130,
-  	dy: -40,
-  	dx: -10
+	  	x: 760,
+	    y: 130,
+	  	dy: -40,
+	  	dx: -10
 	}]
     
     const annotation3 = [{
@@ -72,10 +73,10 @@
     	label:"France",
     	bgPadding: 5,
   	},
-  	x: 330,
-    y: 355,
-  	dy: -80,
-  	dx: -70
+	  	x: 330,
+	    y: 355,
+	  	dy: -80,
+	  	dx: -70
 	}]
     
     const annotation4 = [{
@@ -83,10 +84,10 @@
     	label:"Canada",
     	bgPadding: 5,
   	},
-  	x: 645,
-    y: 160,
-  	dy: -40,
-  	dx: -60
+	  	x: 645,
+	    y: 160,
+	  	dy: -40,
+	  	dx: -60
 	}]
     
     const annotation5 = [
@@ -137,7 +138,6 @@ const svg = d3.select("#John_Wells_Data_Visualization")
 
 //Read the data - everything below this point requires data from the .csv
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
-
 
     //Add X-axis and Date label
   const x = d3.scaleLinear()
