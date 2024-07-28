@@ -43,7 +43,7 @@
     
     //Fixed list of colors for each country, for consistency
     //These are bolder colors that help with my colorblindness vs. the prebuilt color scales
-    const myColor = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
+    const colors = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
 
 	//Setup up custom annotations
     const annotation1 = [{
@@ -103,7 +103,7 @@
 	  	.append("g")
 	    	.attr("transform", "translate("+marginLeft+","+marginTop+")");
 
-	//Read the data
+	//Read the data - everything below this point requires data from the .csv
 	d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
 
 	    //Add X-axis and Date label
@@ -144,7 +144,7 @@
 	        	.transition().duration(transitionDuration)
 	    		.call(d3.axisLeft(y).ticks(10));
             
-      		//Update line given "lineName"
+      		//Update line passed to the function
       		lineName
 		      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
 		        .transition()
@@ -153,7 +153,7 @@
 			        .x(function(d) { return x(+d.Year) })
 			        .y(function(d) { return y(+d.GDP) })
 		        )
-		        .attr("stroke", function(d){ return myColor(selectedCountry) })
+		        .attr("stroke", function(d){ return colors(selectedCountry) })
 		        .style("stroke-opacity", lineOpacity)
 		        .style("stroke-width", 4)
 		       	.style("fill", "none")
@@ -162,14 +162,14 @@
 	    //Generic function to update any given line, with no animations - used to initialize lines
 	    function updateLineNoTransition(selectedCountry,lineName,lineOpacity) {
 
-	    	//Update line given "lineName"
+	    	//Update line passed to the function
 		    lineName
 			    .datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
 			    .attr("d", d3.line()
 				    .x(function(d) { return x(+d.Year) })
 				    .y(function(d) { return y(+d.GDP) })
 		    	)
-			    .attr("stroke", function(d){ return myColor(selectedCountry) })
+			    .attr("stroke", function(d){ return colors(selectedCountry) })
 			    .style("stroke-opacity", lineOpacity)
 			    .style("stroke-width", 4)
 			    .style("fill", "none")
@@ -182,7 +182,8 @@
 	    updateLineNoTransition("Japan",lineJapan,1);
 	    updateLineWithTransition("United States",lineChina,1); //
 	    updateLineWithTransition("Japan",lineJapan,1);
-    
+
+		//Append the annotations
 		d3.select("#John_Wells_Data_Visualization")
 	  		.append("g")
 	          .call(makeAnnotation1)
