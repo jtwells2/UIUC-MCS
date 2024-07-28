@@ -41,8 +41,97 @@
   	"United States","European Union"]
     
     //Fixed list of colors for each country, for consistency
-    //These are bolder colors that help with my colorblindness better than the prebuilt color scales
+    //These are bolder colors that help with my colorblindness vs. the prebuilt color scales
     const myColor = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
+    
+    const annotation1 = [{
+  	note: {
+    	label:"Japan",
+    	bgPadding: 5,
+  	},
+  	x: 500,
+    y: 168,
+  	dy: -50,
+  	dx: -10
+	}]
+    
+    const annotation2 = [{
+  	note: {
+    	label:"China",
+    	bgPadding: 5,
+  	},
+  	x: 700,
+    y: 452,
+  	dy: -50,
+  	dx: -10
+	}]
+    
+    const annotation3 = [
+  	{
+      note: {
+        label: "Japan's growth stagnates in the mid 1990s after a rapid rise - it has 'caught up' and hit the growth ceiling",
+        bgPadding: 10
+      },
+      connector: {
+        end: "none",    
+        type: "line",
+        lineType : "vertical",   
+        endScale: 5     
+      },
+      color: ["black"],
+      x: 345,
+      y: 105,
+      dy: 150,
+      dx: 50,
+      subject: {
+          radius: 50,
+          radiusPadding: 0
+      }
+	}]
+    
+    const annotation4 = [
+      {
+      note: {
+        label: "China, on the other hand, is now rapidly closing the gap with Japan",
+        bgPadding: 10
+      },
+      connector: {
+        end: "none",    
+        type: "line",
+        lineType : "vertical",   
+        endScale: 5     
+    },
+      color: ["black"],
+      x: 530,
+      y: 510,
+      dy: -10,
+      dx: -35,
+      subject: {
+          radius: 50,
+          radiusPadding: 0
+    }
+	}]
+    
+	const makeAnnotation1 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationLabel)
+  		.annotations(annotation1)
+
+	const makeAnnotation2 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationLabel)
+  		.annotations(annotation2)
+        
+	const makeAnnotation3 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationCalloutCircle)
+  		.annotations(annotation3)
+        
+    const makeAnnotation4 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationLabel)
+  		.annotations(annotation4)
+    	
 
   //Append the svg object where the chart will be created
 const svg = d3.select("#John_Wells_Data_Visualization")
@@ -51,39 +140,6 @@ const svg = d3.select("#John_Wells_Data_Visualization")
     .attr("height", chartHeight + marginTop + marginBot)
   	.append("g")
     	.attr("transform", "translate("+marginLeft+","+marginTop+")");
-    
-const annotations = [
-  {
-    note: {
-      label: "This chart shows the GDP per capita (in $USD) of the US and Japan.",
-      bgPadding: 10
-    },
-    connector: {
-      end: "none",        // Can be none, or arrow or dot
-      type: "line",      // ?? don't know what it does
-      lineType : "vertical",    // ?? don't know what it does
-      endScale: 5     // dot size
-    },
-    color: ["black"],
-    x: 250,
-    y: 200,
-  	dy: 150,
-  	dx: 300,
-  	subject: {
-    	radius: 150,
-    	radiusPadding: 0
-  }
-}]
-
-const type = d3.annotationCalloutCircle
-// Add annotation to the chart
-const makeAnnotations = d3.annotation()
-  .notePadding(15)
-  .type(type)
-  .annotations(annotations)
-d3.select("#John_Wells_Data_Visualization")
-  .append("g")
-  .call(makeAnnotations)
 
 //Read the data
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
@@ -105,9 +161,10 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
 
   // Y-Axis and Label (GDP Per Capita ($USD))
   const y = d3.scaleLinear()
-    .domain([0, 52000])
+    .domain([0,0])
     .range([chartHeight, 0]);
   svg.append("g")
+  	.attr("id","y-axis")
     .call(d3.axisLeft(y).ticks(20));
     
   svg.append("text")
@@ -117,32 +174,65 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
     .attr("y", -marginLeft + 20)
     .text("GDP Per Capita ($USD)");
         
-    //Generic function to update lines
- 	function updateLine(selectedCountry,lineName) {
-    	
- 		//Filter data selection
-      const dataFilter = data.map(function(d){return {Year: d.Year, GDP:d[selectedCountry]} })
-
-      // Give these new data to update line
-      lineName.datum(dataCountry)
+    //Generic function to update any given line, with smooth animations
+ 	function updateLineWithTransition(selectedCountry,lineName,lineOpacity) {
+      
+	 //Update axis as necessary
+    	const y = d3.scaleLinear()
+    	.domain([0, 50000])
+    		.range([chartHeight, 0]);
+  		svg.select("#y-axis")
+        	.transition().duration(transitionDuration)
+    		.call(d3.axisLeft(y).ticks(10));
+            
+      //Update line given "lineName"
+      lineName
+      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
         .transition()
-        .duration(2000)
+        .duration(transitionDuration)
         .attr("d", d3.line()
            .x(function(d) { return x(+d.Year) })
            .y(function(d) { return y(+d.GDP) })
           )
          .attr("stroke", function(d){ return myColor(selectedCountry) })
+         .style("stroke-opacity", lineOpacity)
          .style("stroke-width", 4)
        	 .style("fill", "none")
-        .transition()
-        .duration(1000)
     }
     
-  	//Manually draw the lines we want to display
+    //Generic function to update any given line, with no animations - used to initialize lines
+    function updateLineNoTransition(selectedCountry,lineName,lineOpacity) {
+
+      //Update line given "lineName"
+      lineName
+      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
+        .attr("d", d3.line()
+           .x(function(d) { return x(+d.Year) })
+           .y(function(d) { return y(+d.GDP) })
+          )
+         .attr("stroke", function(d){ return myColor(selectedCountry) })
+         .style("stroke-opacity", lineOpacity)
+         .style("stroke-width", 4)
+       	 .style("fill", "none")
+    }
+    
+  	//Initialize the lines we want to display first with 0 opacity so we get a smooth transition
     const lineChina = svg.append('g').append("path")
 	const lineJapan = svg.append('g').append("path")
-    updateLine("China",lineChina);
-    updateLine("Japan",lineJapan);
+    updateLineNoTransition("China",lineChina,0);
+    updateLineNoTransition("Japan",lineJapan,0);
+    updateLineWithTransition("China",lineChina,1);
+    updateLineWithTransition("Japan",lineJapan,1);
+    
+	d3.select("#John_Wells_Data_Visualization")
+  		.append("g")
+          .call(makeAnnotation1)
+        .append("g")
+          .call(makeAnnotation2)
+        .append("g")
+          .call(makeAnnotation3)
+        .append("g")
+          .call(makeAnnotation4)
+	})
 
-})
 </script>
