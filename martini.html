@@ -5,11 +5,42 @@
 <p1>The <b>"catch-up effect"</b> theorizes that less developed economies will catch up to more developed ones. The theory posits that the per capita GDP of countries will eventually converge to a natural ceiling. This ceiling  represents the slow growth of the most developed countries, meaning that less developed countries will tend to experience higher growth vs. the more developed ones (at least once they transition from a subsistence economy to an industrialized one). This theory makes intuitive sense - it is easier and cheaper to adopt existing technologies that can increase productivity than to invent new ones. </p1><br></br>
 <p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
 
-<!-- Add button -->
-<br><p3>
-<a href="https://jtwells2.github.io/UIUC-MCS/martini.html">
-    <button>Continue --></button>
-</a></p3>
+<br><br>
+<p3><b>Country Selection</b></p3><br>
+<div>
+  <input type="checkbox" class="checkbox" value="Argentina" checked><label>Argentina</label>
+  <input type="checkbox" class="checkbox" value="Australia" checked><label>Australia</label>
+  <input type="checkbox" class="checkbox" value="Brazil" checked><label>Brazil</label>
+  <input type="checkbox" class="checkbox" value="Canada" checked><label>Canada</label>
+  <input type="checkbox" class="checkbox" value="China" checked><label>China</label><br>
+  <input type="checkbox" class="checkbox" value="France" checked><label>France</label>
+  <input type="checkbox" class="checkbox" value="Germany" checked><label>Germany</label>
+  <input type="checkbox" class="checkbox" value="India" checked><label>India</label>
+  <input type="checkbox" class="checkbox" value="Indonesia" checked><label>Indonesia</label>
+  <input type="checkbox" class="checkbox" value="Italy" checked><label>Italy</label>
+  <input type="checkbox" class="checkbox" value="Japan" checked><label>Japan</label><br>
+  <input type="checkbox" class="checkbox" value="Mexico" checked><label>Mexico</label>
+  <input type="checkbox" class="checkbox" value="Russia" checked><label>Russia</label>
+  <input type="checkbox" class="checkbox" value="Saudi Arabia" checked><label>Saudi Arabia</label>
+  <input type="checkbox" class="checkbox" value="South Africa" checked><label>South Africa</label>
+  <input type="checkbox" class="checkbox" value="South Korea" checked><label>South Korea</label><br>
+  <input type="checkbox" class="checkbox" value="Turkey" checked><label>Turkey</label>
+  <input type="checkbox" class="checkbox" value="United Kingdom" checked><label>United Kingdom</label>
+  <input type="checkbox" class="checkbox" value="United States" checked><label>United States</label>
+  <input type="checkbox" class="checkbox" value="European Union" checked><label>European Union</label>
+</div>
+
+
+
+<!-- Number entry for GDP per Capita scale -->
+<br><p4><b>Y-Axis Setting</b>, will change upon country selection:</p4>
+<input class="axisSetting" type="number" min=1000 max=1000000 value=90000>
+
+<br><br><p5>
+<a href="https://jtwells2.github.io/UIUC-MCS/scene5.html">
+    <button><--Restart Slideshow</button>
+</a></p5>
+
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
@@ -43,56 +74,6 @@
     //Fixed list of colors for each country, for consistency
     //These are bolder colors that help with my colorblindness vs. the prebuilt color scales
     const myColor = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
-    
-    const annotation1 = [{
-  	note: {
-    	label:"Mexico",
-    	bgPadding: 5,
-  	},
-  	x: 375,
-    y: 365,
-  	dy: -40,
-  	dx: -10
-	}]
-    
-    const annotation2 = [{
-  	note: {
-    	label:"Argentina",
-    	bgPadding: 5,
-  	},
-  	x: 280,
-    y: 300,
-  	dy: -40,
-  	dx: -10
-	}]
-    
-    const annotation3 = [
-  	{
-      note: {
-        label: "The catch-up effect also shows the outcome of a country's failure to raise productivity. Despite being a much wealthier country per capita before the 1980s, Argentina accrued massive public debts and saw falling productivity throughout the 80s and 90s, leading to incredibly uneven growth vs. a country like Mexico, which saw more sustained growth in productivity levels over the same period, catching up to (and in some periods, passing) Argentina's per capita GDP despite starting at a much lower baseline previously.",
-        bgPadding: 10,
-        wrap:500
-      },
-      color: ["black"],
-      x: 350,
-      y: 15,
-	}]
-    
-	const makeAnnotation1 = d3.annotation()
-  		.notePadding(15)
-  		.type(d3.annotationLabel)
-  		.annotations(annotation1)    
-        
-	const makeAnnotation2 = d3.annotation()
-  		.notePadding(15)
-  		.type(d3.annotationLabel)
-  		.annotations(annotation2)
-
-	const makeAnnotation3 = d3.annotation()
-  		.notePadding(15)
-  		.type(d3.annotationLabel)
-  		.annotations(annotation3)
-        
 
   //Append the svg object where the chart will be created
 const svg = d3.select("#John_Wells_Data_Visualization")
@@ -105,7 +86,15 @@ const svg = d3.select("#John_Wells_Data_Visualization")
 //Read the data
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
 
-
+    // add the options to the button
+    d3.select("#multiselect")
+      .selectAll('myOptions')
+     	.data(countries)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+      
     //Add X-axis and Date label
   const x = d3.scaleLinear()
     .domain(d3.extent(data, function(d) { return +d.Year; }))
@@ -122,7 +111,7 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
 
   // Y-Axis and Label (GDP Per Capita ($USD))
   const y = d3.scaleLinear()
-    .domain([0,3000])
+    .domain([0,15000])
     .range([chartHeight, 0]);
   svg.append("g")
   	.attr("id","y-axis")
@@ -138,9 +127,13 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
     //Generic function to update any given line, with smooth animations
  	function updateLineWithTransition(selectedCountry,lineName,lineOpacity) {
       
-	 //Update axis as necessary
+	 	var yAxisValue = d3.selectAll(".axisSetting").property("value")
+        	if (yAxisValue == "") { yAxisValue = 90000}
+       		else if (yAxisValue <= 1000) { yAxisValue = 1000}
+        	else if (yAxisValue >= 1000000) { yAxisValue = 1000000}
+        
     	const y = d3.scaleLinear()
-    	.domain([0, 15000])
+    		.domain([0, yAxisValue])
     		.range([chartHeight, 0]);
   		svg.select("#y-axis")
         	.transition().duration(transitionDuration)
@@ -177,21 +170,104 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
        	 .style("fill", "none")
     }
     
-  	//Initialize the lines we want to display first with 0 opacity so we get a smooth transition
-    const lineIndia = svg.append('g').append("path")
-	const lineArgentina = svg.append('g').append("path")
-    updateLineNoTransition("India",lineIndia,1);
-    updateLineNoTransition("Argentina",lineArgentina,0);
-    updateLineWithTransition("Mexico",lineIndia,1);
-    updateLineWithTransition("Argentina",lineArgentina,1);
+    //Initialize checkbox as blank
+    d3.selectAll('input').property('checked', false);
     
-	d3.select("#John_Wells_Data_Visualization")
-  		.append("g")
-          .call(makeAnnotation1)
-        .append("g")
-          .call(makeAnnotation2)
-        .append("g")
-          .call(makeAnnotation3)    
+  	//Initialize all the lines but leave them blank
+	const lineArgentina = svg.append('g').append("path")
+    const lineAustralia = svg.append('g').append("path")
+    const lineBrazil = svg.append('g').append("path")
+    const lineCanada = svg.append('g').append("path")
+    const lineChina = svg.append('g').append("path")
+    const lineFrance = svg.append('g').append("path")
+    const lineGermany = svg.append('g').append("path")
+    const lineIndia = svg.append('g').append("path")
+    const lineIndonesia = svg.append('g').append("path")
+    const lineItaly = svg.append('g').append("path")
+    const lineJapan = svg.append('g').append("path")
+    const lineMexico = svg.append('g').append("path")
+    const lineRussia = svg.append('g').append("path")
+    const lineSaudiArabia = svg.append('g').append("path")
+    const lineSouthAfrica = svg.append('g').append("path")
+    const lineSouthKorea = svg.append('g').append("path")
+    const lineTurkey = svg.append('g').append("path")
+    const lineUnitedKingdom = svg.append('g').append("path")
+    const lineUnitedStates = svg.append('g').append("path")
+    const lineEuropeanUnion = svg.append('g').append("path")
+    
+    updateLineNoTransition("Argentina",lineArgentina,1);
+    updateLineNoTransition("Australia",lineAustralia,0);
+    updateLineNoTransition("Brazil",lineBrazil,0);
+    updateLineNoTransition("Canada",lineCanada,0);
+    updateLineNoTransition("China",lineChina,0);
+    updateLineNoTransition("France",lineFrance,0);
+    updateLineNoTransition("Germany",lineGermany,0);
+    updateLineNoTransition("India",lineIndia,0);
+    updateLineNoTransition("Indonesia",lineIndonesia,0);
+    updateLineNoTransition("Italy",lineItaly,0);
+    updateLineNoTransition("Japan",lineJapan,0);
+    updateLineNoTransition("Mexico",lineMexico,1);
+    updateLineNoTransition("Russia",lineRussia,0);
+    updateLineNoTransition("Saudi Arabia",lineSaudiArabia,0);
+    updateLineNoTransition("South Africa",lineSouthAfrica,0);
+    updateLineNoTransition("South Korea",lineSouthKorea,0);
+    updateLineNoTransition("Turkey",lineTurkey,0);
+    updateLineNoTransition("United Kingdom",lineUnitedKingdom,0);
+    updateLineNoTransition("United States",lineUnitedStates,0);
+    updateLineNoTransition("European Union",lineEuropeanUnion,0);
+    
+    updateLineWithTransition("Mexico",lineMexico,0);
+    updateLineWithTransition("Argentina",lineArgentina,0);
+     
+    d3.selectAll(".checkbox").on("change",function(d) { 
+    	const checked = d3.selectAll("input[type='checkbox']:checked");
+        const notchecked = d3.selectAll("input[type='checkbox']:not(:checked)");
+        checked.each(function() {
+        	if(this.value=="Argentina") {updateLineWithTransition(this.value,lineArgentina,1)}
+            else if(this.value=="Australia") {updateLineWithTransition(this.value,lineAustralia,1)}
+            else if(this.value=="Brazil") {updateLineWithTransition(this.value,lineBrazil,1)}
+            else if(this.value=="Canada") {updateLineWithTransition(this.value,lineCanada,1)}
+            else if(this.value=="China") {updateLineWithTransition(this.value,lineChina,1)}
+            else if(this.value=="France") {updateLineWithTransition(this.value,lineFrance,1)}
+            else if(this.value=="Germany") {updateLineWithTransition(this.value,lineGermany,1)}
+            else if(this.value=="India") {updateLineWithTransition(this.value,lineIndia,1)}
+            else if(this.value=="Indonesia") {updateLineWithTransition(this.value,lineIndonesia,1)}
+            else if(this.value=="Italy") {updateLineWithTransition(this.value,lineItaly,1)}
+          	else if(this.value=="Japan") {updateLineWithTransition(this.value,lineJapan,1)}
+            else if(this.value=="Mexico") {updateLineWithTransition(this.value,lineMexico,1)}
+            else if(this.value=="Russia") {updateLineWithTransition(this.value,lineRussia,1)}
+            else if(this.value=="Saudi Arabia") {updateLineWithTransition(this.value,lineSaudiArabia,1)}
+            else if(this.value=="South Africa") {updateLineWithTransition(this.value,lineSouthAfrica,1)}
+            else if(this.value=="South Korea") {updateLineWithTransition(this.value,lineSouthKorea,1)}
+            else if(this.value=="Turkey") {updateLineWithTransition(this.value,lineTurkey,1)}
+            else if(this.value=="United Kingdom") {updateLineWithTransition(this.value,lineUnitedKingdom,1)}
+            else if(this.value=="United States") {updateLineWithTransition(this.value,lineUnitedStates,1)}
+            else if(this.value=="European Union") {updateLineWithTransition(this.value,lineEuropeanUnion,1)}
+        });
+        notchecked.each(function() {
+        	if(this.value=="Argentina") {updateLineWithTransition(this.value,lineArgentina,0)}
+            else if(this.value=="Australia") {updateLineWithTransition(this.value,lineAustralia,0)}
+            else if(this.value=="Brazil") {updateLineWithTransition(this.value,lineBrazil,0)}
+            else if(this.value=="Canada") {updateLineWithTransition(this.value,lineCanada,0)}
+            else if(this.value=="China") {updateLineWithTransition(this.value,lineChina,0)}
+            else if(this.value=="France") {updateLineWithTransition(this.value,lineFrance,0)}
+            else if(this.value=="Germany") {updateLineWithTransition(this.value,lineGermany,0)}
+            else if(this.value=="India") {updateLineWithTransition(this.value,lineIndia,0)}
+            else if(this.value=="Indonesia") {updateLineWithTransition(this.value,lineIndonesia,0)}
+            else if(this.value=="Italy") {updateLineWithTransition(this.value,lineItaly,0)}
+          	else if(this.value=="Japan") {updateLineWithTransition(this.value,lineJapan,0)}
+            else if(this.value=="Mexico") {updateLineWithTransition(this.value,lineMexico,0)}
+            else if(this.value=="Russia") {updateLineWithTransition(this.value,lineRussia,0)}
+            else if(this.value=="Saudi Arabia") {updateLineWithTransition(this.value,lineSaudiArabia,0)}
+            else if(this.value=="South Africa") {updateLineWithTransition(this.value,lineSouthAfrica,0)}
+            else if(this.value=="South Korea") {updateLineWithTransition(this.value,lineSouthKorea,0)}
+            else if(this.value=="Turkey") {updateLineWithTransition(this.value,lineTurkey,0)}
+            else if(this.value=="United Kingdom") {updateLineWithTransition(this.value,lineUnitedKingdom,0)}
+            else if(this.value=="United States") {updateLineWithTransition(this.value,lineUnitedStates,0)}
+            else if(this.value=="European Union") {updateLineWithTransition(this.value,lineEuropeanUnion,0)}
+        });
+    })
+     
 	})
 
 </script>
