@@ -6,6 +6,7 @@
 <p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
 
 <br><br>
+<!-- Country Data Checkboxes -->
 <p3><b>Country Selection</b></p3><br>
 <div>
   <input type="checkbox" class="checkbox" value="Argentina" checked><label>Argentina</label>
@@ -30,17 +31,14 @@
   <input type="checkbox" class="checkbox" value="European Union" checked><label>European Union</label>
 </div>
 
-
-
 <!-- Number entry for GDP per Capita scale -->
 <br><p4><b>Y-Axis Setting</b>, will change upon country selection:</p4>
 <input class="axisSetting" type="number" min=1000 max=1000000 value=90000>
 
 <br><br><p5>
-<a href="https://jtwells2.github.io/UIUC-MCS/scene5.html">
+<a href="https://jtwells2.github.io/UIUC-MCS/scene1.html">
     <button><--Restart Slideshow</button>
-</a></p5>
-
+</a></p5><br>
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
@@ -48,12 +46,14 @@
 <!-- Load d3-annotation -->
 <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
+<!-- Set up Data Viz svg container -->
 <svg id="John_Wells_Data_Visualization" 
 	width="900" 
     height ="900" 
     style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
 </svg>
 
+<!--Beginning of script-->
 <script>
 
 	//Define constants
