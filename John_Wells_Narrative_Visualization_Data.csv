@@ -1,54 +1,54 @@
 Year,Country,Value
-1980,United States,12552.943
-1981,United States,13948.701
-1982,United States,14404.994
-1983,United States,15513.679
-1984,United States,17086.441
-1985,United States,18199.32
-1986,United States,19034.766
-1987,United States,20000.968
-1988,United States,21375.999
-1989,United States,22814.077
-1990,United States,23847.977
-1991,United States,24302.776
-1992,United States,25392.931
-1993,United States,26364.192
-1994,United States,27674.021
-1995,United States,28671.48
-1996,United States,29946.973
-1997,United States,31440.087
-1998,United States,32833.666
-1999,United States,34496.241
-2000,United States,36312.782
-2001,United States,37101.453
-2002,United States,37945.761
-2003,United States,39405.354
-2004,United States,41641.617
-2005,United States,44034.256
-2006,United States,46216.853
-2007,United States,47943.353
-2008,United States,48470.553
-2009,United States,47102.428
-2010,United States,48586.288
-2011,United States,50008.108
-2012,United States,51736.738
-2013,United States,53363.904
-2014,United States,55263.817
-2015,United States,57006.926
-2016,United States,58179.697
-2017,United States,60292.978
-2018,United States,63165.278
-2019,United States,65504.783
-2020,United States,64367.435
-2021,United States,70995.794
-2022,United States,77191.871
-2023,United States,81632.253
-2024,United States,85372.686
-2025,United States,87978.472
-2026,United States,90902.779
-2027,United States,94011.701
-2028,United States,97230.612
-2029,United States,100579.865
+1980,Canada,11281.422
+1981,Canada,12396.666
+1982,Canada,12543.938
+1983,Canada,13493.198
+1984,Canada,13947.358
+1985,Canada,14185.922
+1986,Canada,14539.75
+1987,Canada,16408.139
+1988,Canada,19041.182
+1989,Canada,20842.455
+1990,Canada,21572.137
+1991,Canada,21885.57
+1992,Canada,20984.778
+1993,Canada,20210.452
+1994,Canada,20024.581
+1995,Canada,20706.725
+1996,Canada,21325.69
+1997,Canada,21930.485
+1998,Canada,21046.556
+1999,Canada,22340.553
+2000,Canada,24296.721
+2001,Canada,23859.77
+2002,Canada,24279.8
+2003,Canada,28340.085
+2004,Canada,32178.496
+2005,Canada,36440.967
+2006,Canada,40559.017
+2007,Canada,44717.074
+2008,Canada,46773.744
+2009,Canada,40989.278
+2010,Canada,47625.742
+2011,Canada,52285.815
+2012,Canada,52745.057
+2013,Canada,52711.32
+2014,Canada,51025.428
+2015,Canada,43628.425
+2016,Canada,42382.499
+2017,Canada,45192.368
+2018,Canada,46617.97
+2019,Canada,46430.975
+2020,Canada,43573.195
+2021,Canada,52520.512
+2022,Canada,55612.897
+2023,Canada,53547.719
+2024,Canada,54866.046
+2025,Canada,57021.076
+2026,Canada,58907.323
+2027,Canada,60729.072
+2028,Canada,62636.191
+2029,Canada,64652.555
 1980,Japan,9671.891
 1981,Japan,10586.565
 1982,Japan,9782.384
@@ -99,3 +99,53 @@ Year,Country,Value
 2027,Japan,38064.804
 2028,Japan,39819.642
 2029,Japan,40948.61
+1980,United States,12552.943
+1981,United States,13948.701
+1982,United States,14404.994
+1983,United States,15513.679
+1984,United States,17086.441
+1985,United States,18199.32
+1986,United States,19034.766
+1987,United States,20000.968
+1988,United States,21375.999
+1989,United States,22814.077
+1990,United States,23847.977
+1991,United States,24302.776
+1992,United States,25392.931
+1993,United States,26364.192
+1994,United States,27674.021
+1995,United States,28671.48
+1996,United States,29946.973
+1997,United States,31440.087
+1998,United States,32833.666
+1999,United States,34496.241
+2000,United States,36312.782
+2001,United States,37101.453
+2002,United States,37945.761
+2003,United States,39405.354
+2004,United States,41641.617
+2005,United States,44034.256
+2006,United States,46216.853
+2007,United States,47943.353
+2008,United States,48470.553
+2009,United States,47102.428
+2010,United States,48586.288
+2011,United States,50008.108
+2012,United States,51736.738
+2013,United States,53363.904
+2014,United States,55263.817
+2015,United States,57006.926
+2016,United States,58179.697
+2017,United States,60292.978
+2018,United States,63165.278
+2019,United States,65504.783
+2020,United States,64367.435
+2021,United States,70995.794
+2022,United States,77191.871
+2023,United States,81632.253
+2024,United States,85372.686
+2025,United States,87978.472
+2026,United States,90902.779
+2027,United States,94011.701
+2028,United States,97230.612
+2029,United States,100579.865
