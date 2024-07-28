@@ -6,39 +6,39 @@
 <p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
 
 <br><br>
-<!-- Country Data Checkboxes -->
-<p3><b>Country Selection</b></p3><br>
+<p3 style="font-size:20px"><b>Country Selection</b></p3><br>
 <div>
-  <input type="checkbox" class="checkbox" value="Argentina" checked><label>Argentina</label>
-  <input type="checkbox" class="checkbox" value="Australia" checked><label>Australia</label>
-  <input type="checkbox" class="checkbox" value="Brazil" checked><label>Brazil</label>
-  <input type="checkbox" class="checkbox" value="Canada" checked><label>Canada</label>
-  <input type="checkbox" class="checkbox" value="China" checked><label>China</label><br>
-  <input type="checkbox" class="checkbox" value="France" checked><label>France</label>
-  <input type="checkbox" class="checkbox" value="Germany" checked><label>Germany</label>
-  <input type="checkbox" class="checkbox" value="India" checked><label>India</label>
-  <input type="checkbox" class="checkbox" value="Indonesia" checked><label>Indonesia</label>
-  <input type="checkbox" class="checkbox" value="Italy" checked><label>Italy</label>
-  <input type="checkbox" class="checkbox" value="Japan" checked><label>Japan</label><br>
-  <input type="checkbox" class="checkbox" value="Mexico" checked><label>Mexico</label>
-  <input type="checkbox" class="checkbox" value="Russia" checked><label>Russia</label>
-  <input type="checkbox" class="checkbox" value="Saudi Arabia" checked><label>Saudi Arabia</label>
-  <input type="checkbox" class="checkbox" value="South Africa" checked><label>South Africa</label>
-  <input type="checkbox" class="checkbox" value="South Korea" checked><label>South Korea</label><br>
-  <input type="checkbox" class="checkbox" value="Turkey" checked><label>Turkey</label>
-  <input type="checkbox" class="checkbox" value="United Kingdom" checked><label>United Kingdom</label>
-  <input type="checkbox" class="checkbox" value="United States" checked><label>United States</label>
-  <input type="checkbox" class="checkbox" value="European Union" checked><label>European Union</label>
+  <input type="checkbox" class="checkbox" value="Argentina" not:checked><b><label style="color:#393b79; font-size:20px">Argentina</label></b>
+  <input type="checkbox" class="checkbox" value="Australia" not:checked><b><label style="color:#5254a3; font-size:20px">Australia</label></b>
+  <input type="checkbox" class="checkbox" value="Brazil" not:checked><b><label style="color:#6b6ecf; font-size:20px">Brazil</label></b>
+  <input type="checkbox" class="checkbox" value="Canada" not:checked><b><label style="color:#9c9ede; font-size:20px">Canada</label></b>
+  <input type="checkbox" class="checkbox" value="China" not:checked><b><label style="color:#637939; font-size:20px">China</label></b><br>
+  <input type="checkbox" class="checkbox" value="France" not:checked><b><label style="color:#8ca252; font-size:20px">France</label></b>
+  <input type="checkbox" class="checkbox" value="Germany" not:checked><b><label style="color:#b5cf6b; font-size:20px">Germany</label></b>
+  <input type="checkbox" class="checkbox" value="India" not:checked><b><label style="color:#cedb9c; font-size:20px">India</label></b>
+  <input type="checkbox" class="checkbox" value="Indonesia" not:checked><b><label style="color:#8c6d31; font-size:20px">Indonesia</label></b>
+  <input type="checkbox" class="checkbox" value="Italy" not:checked><b><label style="color:#bd9e39; font-size:20px">Italy</label></b>
+  <input type="checkbox" class="checkbox" value="Japan" not:checked><b><label style="color:#e7ba52; font-size:20px">Japan</label></b><br>
+  <input type="checkbox" class="checkbox" value="Mexico" not:checked><b><label style="color:#e7cb94; font-size:20px">Mexico</label></b>
+  <input type="checkbox" class="checkbox" value="Russia" not:checked><b><label style="color:#843c39; font-size:20px">Russia</label></b>
+  <input type="checkbox" class="checkbox" value="Saudi Arabia" not:checked><b><label style="color:#ad494a; font-size:20px">Saudi Arabia</label></b>
+  <input type="checkbox" class="checkbox" value="South Africa" not:checked><b><label style="color:#d6616b; font-size:20px">South Africa</label></b>
+  <input type="checkbox" class="checkbox" value="South Korea" not:checked><b><label style="color:#e7969c; font-size:20px">South Korea</label></b><br>
+  <input type="checkbox" class="checkbox" value="Turkey" not:checked><b><label style="color:#7b4173; font-size:20px">Turkey</label></b>
+  <input type="checkbox" class="checkbox" value="United Kingdom" not:checked><b><label style="color:#a55194; font-size:20px">United Kingdom</label></b>
+  <input type="checkbox" class="checkbox" value="United States" not:checked><b><label style="color:#ce6dbd; font-size:20px">United States</label></b>
+  <input type="checkbox" class="checkbox" value="European Union" not:checked><b><label style="color:#de9ed6; font-size:20px">European Union</label></b>
 </div>
 
 <!-- Number entry for GDP per Capita scale -->
-<br><p4><b>Y-Axis Setting</b>, will change upon country selection:</p4>
+<br><p4 style="font-size:20px"><b>Y-Axis Setting</b>, will change upon country selection:</p4>
 <input class="axisSetting" type="number" min=1000 max=1000000 value=90000>
 
 <br><br><p5>
-<a href="https://jtwells2.github.io/UIUC-MCS/scene1.html">
-    <button><--Restart Slideshow</button>
-</a></p5><br>
+<a href="https://jtwells2.github.io/UIUC-MCS/scene5.html">
+    <button style="font-size:15px"><--Restart Slideshow</button>
+</a></p5>
+
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
@@ -46,14 +46,12 @@
 <!-- Load d3-annotation -->
 <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
-<!-- Set up Data Viz svg container -->
 <svg id="John_Wells_Data_Visualization" 
 	width="900" 
     height ="900" 
     style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
 </svg>
 
-<!--Beginning of script-->
 <script>
 
 	//Define constants
@@ -152,6 +150,7 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
          .style("stroke-opacity", lineOpacity)
          .style("stroke-width", 4)
        	 .style("fill", "none")
+         
     }
     
     //Generic function to update any given line, with no animations - used to initialize lines
@@ -169,9 +168,6 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
          .style("stroke-width", 4)
        	 .style("fill", "none")
     }
-    
-    //Initialize checkbox as blank
-    d3.selectAll('input').property('checked', false);
     
   	//Initialize all the lines but leave them blank
 	const lineArgentina = svg.append('g').append("path")
