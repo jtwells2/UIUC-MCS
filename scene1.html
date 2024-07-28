@@ -124,8 +124,9 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
       const dataFilter = data.map(function(d){return {Year: d.Year, GDP:d[selectedCountry]} })
 
       // Give these new data to update line
-      lineName
-      	.datum(dataFilter)
+      lineName.datum(dataCountry)
+        .transition()
+        .duration(2000)
         .attr("d", d3.line()
            .x(function(d) { return x(+d.Year) })
            .y(function(d) { return y(+d.GDP) })
