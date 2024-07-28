@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
+<h1>Understanding the Catch-Up Effect</h1>
+<p1>The <b>"catch-up effect"</b> theorizes that less developed economies will catch up to more developed ones. The theory posits that the per capita GDP of countries will eventually converge to a natural ceiling. This ceiling  represents the slow growth of the most developed countries, meaning that less developed countries will tend to experience higher growth vs. the more developed ones (at least once they transition from a subsistence economy to an industrialized one). This theory makes intuitive sense - it is easier and cheaper to adopt existing technologies that can increase productivity than to invent new ones. </p1><br></br>
+<p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
+
+<!-- Simple button -->
+<br><br>
+<a class="btn btn-secondary" href="https://github.com/holtzy/data_to_viz">Click Here to progress</a>
+
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
 
-<!-- Initialize a select button -->
-<select multiple id="selectButton"></select>
+<!-- Load d3-annotation -->
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
 <svg id="John_Wells_Data_Visualization" 
 	width="900" 
@@ -27,6 +35,39 @@ const svg = d3.select("#John_Wells_Data_Visualization")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+const annotations = [
+  {
+    note: {
+      label: "This chart shows the GDP per capita (in $USD) of the US and Japan.",
+      bgPadding: 10
+    },
+    connector: {
+      end: "none",        // Can be none, or arrow or dot
+      type: "line",      // ?? don't know what it does
+      lineType : "vertical",    // ?? don't know what it does
+      endScale: 5     // dot size
+    },
+    color: ["black"],
+    x: 250,
+    y: 200,
+  	dy: 150,
+  	dx: 300,
+  	subject: {
+    	radius: 150,
+    	radiusPadding: 0
+  }
+}]
+
+const type = d3.annotationCalloutCircle
+// Add annotation to the chart
+const makeAnnotations = d3.annotation()
+  .notePadding(15)
+  .type(type)
+  .annotations(annotations)
+d3.select("#John_Wells_Data_Visualization")
+  .append("g")
+  .call(makeAnnotations)
 
 //Read the data
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
@@ -52,7 +93,7 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
 
     // Add Y axis
     const y = d3.scaleLinear()
-      .domain( [0,120000])
+      .domain( [0,52000])
       .range([ height, 0 ]);
     svg.append("g")
       .call(d3.axisLeft(y));
@@ -64,9 +105,9 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
         .datum(data)
         .attr("d", d3.line()
           .x(function(d) { return x(+d.Year) })
-          .y(function(d,i) { return y(+d["United States"]) })
+          .y(function(d,i) { return y(+d["China"]) })
         )
-        .attr("stroke", function(d){ return myColor("United States") })
+        .attr("stroke", function(d){ return myColor("China") })
         .style("stroke-width", 4)
         .style("fill", "none")
 
@@ -76,7 +117,7 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
         .datum(data)
         .attr("d", d3.line()
           .x(function(d) { return x(+d.Year) })
-          .y(function(d) { return y(+d["Argentina"]) })
+          .y(function(d) { return y(+d["Japan"]) })
         )
         .attr("stroke", function(d){ return myColor("Japan") })
         .style("stroke-width", 4)
