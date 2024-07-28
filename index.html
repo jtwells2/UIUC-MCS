@@ -10,14 +10,16 @@
     style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
 </svg>
 
+<select id="selectButton"></select>
+
 <script>
 
-	//Constants to declare before loading
-	const chartWidth = 800
-    const chartHeight = 500
-	const marginLeft = 70
-    const marginTop = 20
-    const transitionDuration = 750
+//Constants to declare before loading
+const chartWidth = 800
+const chartHeight = 500
+const marginLeft = 70
+const marginTop = 20
+const transitionDuration = 750
 
 	// append the svg object to the body of the page
 	const svg = d3.select("#John_Wells_Data_Visualization").append("svg")
@@ -32,6 +34,14 @@ d3.csv("https://jtwells2.github.io/UIUC-MCS/John_Wells_Narrative_Visualization_D
 
   // group the data: I want to draw one line per group
   const sumstat = d3.group(data, d => d.Country); // nest function allows to group the calculation per level of a factor
+
+  d3.select("#selectButton")
+      .selectAll('myOptions')
+     	.data(sumstat)
+      .enter()
+    	.append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
   // X-Axis and Label (Date)
   const x = d3.scaleLinear()
