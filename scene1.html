@@ -26,10 +26,10 @@
 <script>
 
 	//Define constants
-    const chartWidth = 700
+    const chartWidth = 800
     const chartHeight = 500
-    const marginTop = 50
-    const marginBot = 50
+    const marginTop = 30
+    const marginBot = 100
     const marginLeft = 70
     const marginRight = 30
     const transitionDuration = 1000 
@@ -89,45 +89,59 @@ d3.select("#John_Wells_Data_Visualization")
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
 
 
-    // Add X axis --> it is a date format
-    const x = d3.scaleLinear()
-      .domain(d3.extent(data, function(d) { return +d.Year; }))
-      .range([0, chartWidth]);
-    svg.append("g")
-      .attr("transform", `translate(0, ${chartHeight})`)
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-    const y = d3.scaleLinear()
-      .domain( [0,52000])
-      .range([chartHeight, 0]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
+    //Add X-axis and Date label
+  const x = d3.scaleLinear()
+    .domain(d3.extent(data, function(d) { return +d.Year; }))
+    .range([0, chartWidth]);
+  svg.append("g")
+    .attr("transform", "translate(0,"+chartHeight+")")
+    .call(d3.axisBottom(x).ticks(10));
       
-  	// Draw the lines
-    const line1 = svg
-      .append('g')
-      .append("path")
-        .datum(data)
-        .attr("d", d3.line()
-          .x(function(d) { return x(+d.Year) })
-          .y(function(d,i) { return y(+d["China"]) })
-        )
-        .attr("stroke", function(d){ return myColor("China") })
-        .style("stroke-width", 4)
-        .style("fill", "none")
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", chartWidth / 2)
+    .attr("y", chartHeight + marginBot - 50)
+    .text("Year");
 
-    const line2 = svg
-      .append('g')
-      .append("path")
-        .datum(data)
+  // Y-Axis and Label (GDP Per Capita ($USD))
+  const y = d3.scaleLinear()
+    .domain([0, 52000])
+    .range([chartHeight, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y).ticks(20));
+    
+  svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform","rotate(-90)")
+    .attr("x", -chartHeight / 2)
+    .attr("y", -marginLeft + 20)
+    .text("GDP Per Capita ($USD)");
+        
+    //Generic function to update lines
+ 	function updateLine(selectedCountry,lineName) {
+    	
+ 		//Filter data selection
+      const dataFilter = data.map(function(d){return {Year: d.Year, GDP:d[selectedCountry]} })
+
+      // Give these new data to update line
+      lineName
+      	.datum(dataFilter)
         .attr("d", d3.line()
-          .x(function(d) { return x(+d.Year) })
-          .y(function(d) { return y(+d["Japan"]) })
-        )
-        .attr("stroke", function(d){ return myColor("Japan") })
-        .style("stroke-width", 4)
-        .style("fill", "none"); 
+           .x(function(d) { return x(+d.Year) })
+           .y(function(d) { return y(+d.GDP) })
+          )
+         .attr("stroke", function(d){ return myColor(selectedCountry) })
+         .style("stroke-width", 4)
+       	 .style("fill", "none")
+        .transition()
+        .duration(1000)
+    }
+    
+  	//Manually draw the lines we want to display
+    const lineChina = svg.append('g').append("path")
+	const lineJapan = svg.append('g').append("path")
+    updateLine("China",lineChina);
+    updateLine("Japan",lineJapan);
 
 })
 </script>
