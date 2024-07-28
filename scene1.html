@@ -8,7 +8,7 @@
 <!-- Add button -->
 <br><p3>
 <a href="https://jtwells2.github.io/UIUC-MCS/index.html">
-    <button>Click Me!</button>
+    <button>Continue --></button>
 </a></p3>
 
 <!-- Load d3.js -->
@@ -25,18 +25,32 @@
 
 <script>
 
-// set the dimensions and margins of the graph
-const margin = {top: 50, right: 100, bottom: 30, left: 50},
-    width = 560 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+	//Define constants
+    const chartWidth = 700
+    const chartHeight = 500
+    const marginTop = 50
+    const marginBot = 50
+    const marginLeft = 70
+    const marginRight = 30
+    const transitionDuration = 1000 
+    
+    //Fixed list of countries for the visualization
+    const countries = ["Argentina","Australia","Brazil","Canada","China",
+  	"France","Germany","India","Indonesia","Italy","Japan","Mexico","Russia",
+  	"Saudi Arabia","South Africa","South Korea","Turkey","United Kingdom",
+  	"United States","European Union"]
+    
+    //Fixed list of colors for each country, for consistency
+    //These are bolder colors that help with my colorblindness better than the prebuilt color scales
+    const myColor = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
 
-// append the svg object to the body of the page
+  //Append the svg object where the chart will be created
 const svg = d3.select("#John_Wells_Data_Visualization")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("width", chartWidth + marginLeft + marginRight)
+    .attr("height", chartHeight + marginTop + marginBot)
+  	.append("g")
+    	.attr("transform", "translate("+marginLeft+","+marginTop+")");
     
 const annotations = [
   {
@@ -74,33 +88,23 @@ d3.select("#John_Wells_Data_Visualization")
 //Read the data
 d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
 
-    // List of groups (here I have one group per column)
-    const allGroup = ["Argentina","Australia","Brazil","Canada","China",
-  "France","Germany","India","Indonesia","Italy","Japan","Mexico","Russia",
-  "Saudi Arabia","South Africa","South Korea","Turkey","United Kingdom",
-  "United States","European Union"]
-
-    // A color scale: one color for each group
-    const myColor = d3.scaleOrdinal()
-      .domain(allGroup)
-      .range(d3.schemeSet2);
 
     // Add X axis --> it is a date format
     const x = d3.scaleLinear()
       .domain(d3.extent(data, function(d) { return +d.Year; }))
-      .range([ 0, width ]);
+      .range([0, chartWidth]);
     svg.append("g")
-      .attr("transform", `translate(0, ${height})`)
+      .attr("transform", `translate(0, ${chartHeight})`)
       .call(d3.axisBottom(x));
 
     // Add Y axis
     const y = d3.scaleLinear()
       .domain( [0,52000])
-      .range([ height, 0 ]);
+      .range([chartHeight, 0]);
     svg.append("g")
       .call(d3.axisLeft(y));
+      
   	// Draw the lines
-
     const line1 = svg
       .append('g')
       .append("path")
