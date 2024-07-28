@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<h1>Understanding the Catch-Up Effect</h1>
+<p1>The <b>"catch-up effect"</b> theorizes that less developed economies will catch up to more developed ones. The theory posits that the per capita GDP of countries will eventually converge to a natural ceiling. This ceiling  represents the slow growth of the most developed countries, meaning that less developed countries will tend to experience higher growth vs. the more developed ones (at least once they transition from a subsistence economy to an industrialized one). This theory makes intuitive sense - it is easier and cheaper to adopt existing technologies that can increase productivity than to invent new ones. </p1><br></br>
+<p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
+
+<!-- Scene Progression Button -->
+<br><p3>
+<a href="https://jtwells2.github.io/UIUC-MCS/martini_scene5.html">
+    <button style="font-size:15px">Continue --></button>
+</a></p3><br>
+
+<!-- Load d3 -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Load d3-annotation -->
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
+<!-- Set up svg container -->
+<svg id="John_Wells_Data_Visualization" 
+	width="900" 
+    height ="900" 
+    style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
+</svg>
+
+<!-- Begin script-->
+<script>
+
+	//Define constants
+    const chartWidth = 800
+    const chartHeight = 500
+    const marginTop = 30
+    const marginBot = 100
+    const marginLeft = 70
+    const marginRight = 30
+    const transitionDuration = 1000 
+    
+    //Fixed list of countries for the visualization
+    const countries = ["Argentina","Australia","Brazil","Canada","China",
+  	"France","Germany","India","Indonesia","Italy","Japan","Mexico","Russia",
+  	"Saudi Arabia","South Africa","South Korea","Turkey","United Kingdom",
+  	"United States","European Union"]
+    
+    //Fixed list of colors for each country, for consistency
+    //These are bolder colors that help with my colorblindness vs. the prebuilt color scales
+    const colors = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
+
+	//Setup up custom annotations
+    const annotation1 = [{
+  	note: {
+    	label:"India",
+    	bgPadding: 5,
+  	},
+  	x: 435,
+    y: 455,
+  	dy: -60,
+  	dx: -10
+	}]
+    
+    const annotation2 = [
+  	{
+      note: {
+        label: "Despite its limitations, understanding the catch-up effect remains a useful way to understand what type of growth patterns we expect to see when countries begin to industrialize. We can see that India's growth in per capita GDP has just begun to take off over the last two decades as the country rapidly industrializes. From the theory, we would expect this to continue until some convergence point is reached.",
+        bgPadding: 10,
+        wrap:500
+      },
+      color: ["black"],
+      x: 350,
+      y: 155,
+	}]
+    
+	const makeAnnotation1 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationLabel)
+  		.annotations(annotation1)
+
+	const makeAnnotation2 = d3.annotation()
+  		.notePadding(15)
+  		.type(d3.annotationLabel)
+  		.annotations(annotation2)
+        
+
+  //Append the svg object where the chart will be created
+	const svg = d3.select("#John_Wells_Data_Visualization")
+	  	.append("svg")
+	    .attr("width", chartWidth + marginLeft + marginRight)
+	    .attr("height", chartHeight + marginTop + marginBot)
+	  	.append("g")
+	    	.attr("transform", "translate("+marginLeft+","+marginTop+")");
+
+	//Read the data
+	d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
+
+    //Add X-axis and Date label
+  	const x = d3.scaleLinear()
+	    .domain(d3.extent(data, function(d) { return +d.Year; }))
+	    .range([0, chartWidth]);
+  	svg.append("g")
+	    .attr("transform", "translate(0,"+chartHeight+")")
+	    .call(d3.axisBottom(x).ticks(10));
+	svg.append("text")
+	    .attr("text-anchor", "middle")
+	    .attr("x", chartWidth / 2)
+	    .attr("y", chartHeight + marginBot - 50)
+	    .text("Year");
+
+  	// Y-Axis and Label (GDP Per Capita ($USD))
+	const y = d3.scaleLinear()
+		.domain([0,70000])
+		.range([chartHeight, 0]);
+	svg.append("g")
+		.attr("id","y-axis")
+		.call(d3.axisLeft(y).ticks(10));
+	svg.append("text")
+	    .attr("text-anchor", "middle")
+	    .attr("transform","rotate(-90)")
+	    .attr("x", -chartHeight / 2)
+	    .attr("y", -marginLeft + 20)
+	    .text("GDP Per Capita ($USD)");
+	        
+    //Generic function to update any given line, with smooth animations
+ 	function updateLineWithTransition(selectedCountry,lineName,lineOpacity) {
+      
+	 //Update axis as necessary
+    	const y = d3.scaleLinear()
+    	.domain([0, 3000])
+    		.range([chartHeight, 0]);
+  		svg.select("#y-axis")
+        	.transition().duration(transitionDuration)
+    		.call(d3.axisLeft(y).ticks(10));
+            
+      //Update line passed to the function
+      lineName
+      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
+        .transition()
+        .duration(transitionDuration)
+        .attr("d", d3.line()
+           .x(function(d) { return x(+d.Year) })
+           .y(function(d) { return y(+d.GDP) })
+          )
+         .attr("stroke", function(d){ return colors(selectedCountry) })
+         .style("stroke-opacity", lineOpacity)
+         .style("stroke-width", 4)
+       	 .style("fill", "none")
+    }
+    
+    //Generic function to update any given line, with no animations - used to initialize lines
+    function updateLineNoTransition(selectedCountry,lineName,lineOpacity) {
+
+      //Update line passed to the function
+      lineName
+      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
+        .attr("d", d3.line()
+           .x(function(d) { return x(+d.Year) })
+           .y(function(d) { return y(+d.GDP) })
+          )
+         .attr("stroke", function(d){ return colors(selectedCountry) })
+         .style("stroke-opacity", lineOpacity)
+         .style("stroke-width", 4)
+       	 .style("fill", "none")
+    }
+    
+  	//Initialize the lines we want to display first with 0 opacity so we get a smooth transition
+    const lineUnitedStates= svg.append('g').append("path")
+	const lineJapan = svg.append('g').append("path")
+    const lineAustralia = svg.append('g').append("path")
+    const lineCanada = svg.append('g').append("path")
+    updateLineNoTransition("United States",lineUnitedStates,1);
+    updateLineNoTransition("Japan",lineJapan,1);
+    updateLineNoTransition("Australia",lineAustralia,1);
+    updateLineNoTransition("Canada",lineCanada,1);
+    updateLineWithTransition("France",lineUnitedStates,0); 
+    updateLineWithTransition("Japan",lineJapan,0);
+    updateLineWithTransition("Australia",lineAustralia,0);
+    updateLineWithTransition("India",lineCanada,1);
+
+	//Append the annotations
+	d3.select("#John_Wells_Data_Visualization")
+  		.append("g")
+          .call(makeAnnotation1)
+        .append("g")
+          .call(makeAnnotation2)
+	})
+</script>
