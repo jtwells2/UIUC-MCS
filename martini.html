@@ -6,6 +6,7 @@
 <p2>However, there are a number of ways this effect can be limited that we will explore in the chart below, which is showing Per Capita GDP (in $USD) of various countries over time.</p2>
 
 <br><br>
+<!-- Checkbox to show/hide values - starts unchecked by default -->
 <p3 style="font-size:20px"><b>Country Selection</b></p3><br>
 <div>
   <input type="checkbox" class="checkbox" value="Argentina" not:checked><b><label style="color:#393b79; font-size:20px">Argentina</label></b>
@@ -34,13 +35,13 @@
 <br><p4 style="font-size:20px"><b>Y-Axis Setting</b>, will change upon country selection:</p4>
 <input class="axisSetting" type="number" min=1000 max=1000000 value=90000>
 
+<!-- Scene Progression Button - Go to the beginning of the slideshow -->
 <br><br><p5>
-<a href="https://jtwells2.github.io/UIUC-MCS/scene5.html">
+<a href="https://jtwells2.github.io/UIUC-MCS/martini_scene1.html">
     <button style="font-size:15px"><--Restart Slideshow</button>
 </a></p5><br>
 
-
-<!-- Load d3.js -->
+<!-- Load d3 -->
 <script src="https://d3js.org/d3.v6.js"></script>
 
 <!-- Load d3-annotation -->
@@ -52,6 +53,7 @@
     style="stroke: rgb(0, 0, 0); stroke-width: 0.6;">
 </svg>
 
+<!-- Begin script-->
 <script>
 
 	//Define constants
@@ -71,65 +73,65 @@
     
     //Fixed list of colors for each country, for consistency
     //These are bolder colors that help with my colorblindness vs. the prebuilt color scales
-    const myColor = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
+    const colors = d3.scaleOrdinal(countries,["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]);
 
-  //Append the svg object where the chart will be created
-const svg = d3.select("#John_Wells_Data_Visualization")
-  .append("svg")
-    .attr("width", chartWidth + marginLeft + marginRight)
-    .attr("height", chartHeight + marginTop + marginBot)
-  	.append("g")
-    	.attr("transform", "translate("+marginLeft+","+marginTop+")");
+  	//Append the svg object where the chart will be created
+	const svg = d3.select("#John_Wells_Data_Visualization")
+  	.append("svg")
+	    .attr("width", chartWidth + marginLeft + marginRight)
+	    .attr("height", chartHeight + marginTop + marginBot)
+  		.append("g")
+    		.attr("transform", "translate("+marginLeft+","+marginTop+")");
 
-//Read the data
-d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
+	//Read the data - everything below this point requires data from the .csv
+	d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").then( function(data) {
 
-    // add the options to the button
+    //Add all the options to the button multiselection
     d3.select("#multiselect")
-      .selectAll('myOptions')
-     	.data(countries)
-      .enter()
+	    .selectAll('option')
+	    	.data(countries)
+	    	.enter()
     	.append('option')
-      .text(function (d) { return d; }) // text showed in the menu
-      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+    		.text(function (d) { return d; })
+    		.attr("value", function (d) { return d; }) 
       
     //Add X-axis and Date label
-  const x = d3.scaleLinear()
-    .domain(d3.extent(data, function(d) { return +d.Year; }))
-    .range([0, chartWidth]);
-  svg.append("g")
-    .attr("transform", "translate(0,"+chartHeight+")")
-    .call(d3.axisBottom(x).ticks(10));
-      
-  svg.append("text")
-    .attr("text-anchor", "middle")
-    .attr("x", chartWidth / 2)
-    .attr("y", chartHeight + marginBot - 50)
-    .text("Year");
+  	const x = d3.scaleLinear()
+    	.domain(d3.extent(data, function(d) { return +d.Year; }))
+    	.range([0, chartWidth]);
+  	svg.append("g")
+    	.attr("transform", "translate(0,"+chartHeight+")")
+    	.call(d3.axisBottom(x).ticks(10));  
+  	svg.append("text")
+	    .attr("text-anchor", "middle")
+	    .attr("x", chartWidth / 2)
+	    .attr("y", chartHeight + marginBot - 50)
+	    .text("Year");
 
-  // Y-Axis and Label (GDP Per Capita ($USD))
-  const y = d3.scaleLinear()
-    .domain([0,15000])
-    .range([chartHeight, 0]);
-  svg.append("g")
-  	.attr("id","y-axis")
-    .call(d3.axisLeft(y).ticks(10));
-    
-  svg.append("text")
-    .attr("text-anchor", "middle")
-    .attr("transform","rotate(-90)")
-    .attr("x", -chartHeight / 2)
-    .attr("y", -marginLeft + 20)
-    .text("GDP Per Capita ($USD)");
+  	// Y-Axis and Label (GDP Per Capita ($USD))
+  	const y = d3.scaleLinear()
+	    .domain([0,15000])
+	    .range([chartHeight, 0]);
+  	svg.append("g")
+	  	.attr("id","y-axis")
+	    .call(d3.axisLeft(y).ticks(10));
+  	svg.append("text")
+	    .attr("text-anchor", "middle")
+	    .attr("transform","rotate(-90)")
+	    .attr("x", -chartHeight / 2)
+	    .attr("y", -marginLeft + 20)
+	    .text("GDP Per Capita ($USD)");
         
     //Generic function to update any given line, with smooth animations
  	function updateLineWithTransition(selectedCountry,lineName,lineOpacity) {
-      
+
+		//Grab y-axis value from the user number entry - clamp to [1000,1000000]
 	 	var yAxisValue = d3.selectAll(".axisSetting").property("value")
         	if (yAxisValue == "") { yAxisValue = 90000}
        		else if (yAxisValue <= 1000) { yAxisValue = 1000}
         	else if (yAxisValue >= 1000000) { yAxisValue = 1000000}
-        
+
+		//Update axis as necessary
     	const y = d3.scaleLinear()
     		.domain([0, yAxisValue])
     		.range([chartHeight, 0]);
@@ -137,39 +139,38 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
         	.transition().duration(transitionDuration)
     		.call(d3.axisLeft(y).ticks(10));
             
-      //Update line given "lineName"
-      lineName
-      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
-        .transition()
-        .duration(transitionDuration)
-        .attr("d", d3.line()
-           .x(function(d) { return x(+d.Year) })
-           .y(function(d) { return y(+d.GDP) })
-          )
-         .attr("stroke", function(d){ return myColor(selectedCountry) })
-         .style("stroke-opacity", lineOpacity)
-         .style("stroke-width", 4)
-       	 .style("fill", "none")
-         
+	    //Update line passed to the function
+	    lineName
+		    .datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
+		    .transition()
+		    .duration(transitionDuration)
+		    .attr("d", d3.line()
+			    .x(function(d) { return x(+d.Year) })
+			    .y(function(d) { return y(+d.GDP) })
+		    )
+		    .attr("stroke", function(d){ return colors(selectedCountry) })
+		    .style("stroke-opacity", lineOpacity)
+		    .style("stroke-width", 4)
+		    .style("fill", "none")
     }
     
     //Generic function to update any given line, with no animations - used to initialize lines
     function updateLineNoTransition(selectedCountry,lineName,lineOpacity) {
 
-      //Update line given "lineName"
-      lineName
-      	.datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
-        .attr("d", d3.line()
-           .x(function(d) { return x(+d.Year) })
-           .y(function(d) { return y(+d.GDP) })
-          )
-         .attr("stroke", function(d){ return myColor(selectedCountry) })
-         .style("stroke-opacity", lineOpacity)
-         .style("stroke-width", 4)
-       	 .style("fill", "none")
+	    //Update line given "lineName"
+	    lineName
+		    .datum(data.map(function(d){ return {Year: d.Year, GDP:d[selectedCountry]} }))
+			.attr("d", d3.line()
+			    .x(function(d) { return x(+d.Year) })
+			    .y(function(d) { return y(+d.GDP) })
+	    	)
+		    .attr("stroke", function(d){ return colors(selectedCountry) })
+		    .style("stroke-opacity", lineOpacity)
+		    .style("stroke-width", 4)
+		    .style("fill", "none")
     }
     
-  	//Initialize all the lines but leave them blank
+  	//Initialize all the lines of data but leave them blank
 	const lineArgentina = svg.append('g').append("path")
     const lineAustralia = svg.append('g').append("path")
     const lineBrazil = svg.append('g').append("path")
@@ -190,7 +191,7 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
     const lineUnitedKingdom = svg.append('g').append("path")
     const lineUnitedStates = svg.append('g').append("path")
     const lineEuropeanUnion = svg.append('g').append("path")
-    
+		
     updateLineNoTransition("Argentina",lineArgentina,1);
     updateLineNoTransition("Australia",lineAustralia,0);
     updateLineNoTransition("Brazil",lineBrazil,0);
@@ -211,10 +212,12 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
     updateLineNoTransition("United Kingdom",lineUnitedKingdom,0);
     updateLineNoTransition("United States",lineUnitedStates,0);
     updateLineNoTransition("European Union",lineEuropeanUnion,0);
-    
+
+	//Smooth transition from scene 5
     updateLineWithTransition("Mexico",lineMexico,0);
     updateLineWithTransition("Argentina",lineArgentina,0);
-     
+
+	//Change line opacity based on checkbox status
     d3.selectAll(".checkbox").on("change",function(d) { 
     	const checked = d3.selectAll("input[type='checkbox']:checked");
         const notchecked = d3.selectAll("input[type='checkbox']:not(:checked)");
@@ -263,7 +266,5 @@ d3.csv("https://raw.githubusercontent.com/jtwells2/UIUC-MCS/main/G20_GDP_Data").
             else if(this.value=="European Union") {updateLineWithTransition(this.value,lineEuropeanUnion,0)}
         });
     })
-     
-	})
-
+})
 </script>
